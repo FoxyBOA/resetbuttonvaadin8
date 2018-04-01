@@ -15,6 +15,7 @@ import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.extensions.AbstractExtensionConnector;
 import com.vaadin.client.ui.VTextField;
+import com.vaadin.shared.communication.SharedState;
 import com.vaadin.shared.ui.Connect;
 
 import org.vaadin.addons.ResetButtonForTextField;
@@ -93,7 +94,7 @@ public class ResetButtonForTextFieldConnector extends
     }
 
     private void updateResetButtonVisibility() {
-        if (textField.getValue().isEmpty() || textField.isReadOnly()
+        if (textField.getValue().isEmpty() || (!getState().showForReadOnly && textField.isReadOnly())
                 || !textField.isEnabled()
                 || textField.getStyleName().contains("v-textfield-prompt")) {
             resetButtonElement.getStyle().setDisplay(Display.NONE);
@@ -107,4 +108,9 @@ public class ResetButtonForTextFieldConnector extends
         updateResetButtonVisibility();
         textField.getElement().focus();
     }
+
+	@Override
+	public ResetButtonForTextFieldState getState() {
+		return (ResetButtonForTextFieldState) super.getState();
+	}
 }
